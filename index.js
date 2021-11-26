@@ -328,10 +328,10 @@ const ScrollableTabView = createReactClass({
       return (
         <SceneComponent
           key={child.key}
-          shouldUpdated={this._shouldRenderSceneKey(
-            idx,
-            this.state.currentPage
-          )}
+          shouldUpdated={
+            this.props.shouldUpdateWhenFocusChanged ||
+            this._shouldRenderSceneKey(idx, this.state.currentPage)
+          }
           style={{ width: this.state.containerWidth }}
         >
           {this._keyExists(this.state.sceneKeys, key) ? (
@@ -432,6 +432,7 @@ const ScrollableTabView = createReactClass({
       activeTab: this.state.currentPage,
       scrollValue: this.state.scrollValue,
       containerWidth: this.state.containerWidth,
+      tabStyle: this.props.tabStyle,
     };
 
     if (this.props.tabBarBackgroundColor) {
@@ -450,11 +451,12 @@ const ScrollableTabView = createReactClass({
       tabBarProps.underlineStyle = this.props.tabBarUnderlineStyle;
     }
     if (overlayTabs) {
-      tabBarProps.style = {
+      tabBarProps.tabStyle = {
         position: "absolute",
         left: 0,
         right: 0,
         [this.props.tabBarPosition === "overlayTop" ? "top" : "bottom"]: 0,
+        ...tabStyle,
       };
     }
 
